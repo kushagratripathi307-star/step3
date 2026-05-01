@@ -46,48 +46,67 @@ public class TicTacToe {
         
         System.out.println("Player " + currentPlayer + " will start the game.");
         
-        // UC3: Accept User Slot Input
+        // UC3: Accept User Slot Input (Replaced by loop below)
         Scanner scanner = new Scanner(System.in);
-        int slot = getUserInput(scanner);
-        System.out.println("You have selected slot: " + slot);
+        boolean isWin = false;
+        boolean isDraw = false;
         
-        // UC4: Convert Slot Number to Board Index
-        int[] index = getBoardIndex(slot);
-        int row = index[0];
-        int col = index[1];
-        System.out.println("This corresponds to board index: [" + row + "][" + col + "]");
-        
-        // UC5: Validate User Move
-        boolean isValid = isValidMove(board, row, col);
-        if (isValid) {
-            System.out.println("Move is valid. The cell is empty.");
-            
-            // UC6: Place Move on Board
+        // UC8: Continuous Turn-Based Game Loop
+        while (!isWin && !isDraw) {
             char currentSymbol = (currentPlayer == 1) ? player1Symbol : player2Symbol;
-            placeMove(board, row, col, currentSymbol);
-            System.out.println("Symbol '" + currentSymbol + "' placed at [" + row + "][" + col + "].");
-        } else {
-            System.out.println("Move is invalid! The cell might be occupied or out of bounds.");
-        }
-        
-        // UC7: Computer Makes a Random Move
-        System.out.println("\n--- Computer's Turn ---");
-        // The computer will use the symbol of the player who didn't start
-        char computerSymbol = (currentPlayer == 1) ? player2Symbol : player1Symbol;
-        int[] compMove = getComputerMove(board, random);
-        placeMove(board, compMove[0], compMove[1], computerSymbol);
-        System.out.println("Computer placed '" + computerSymbol + "' at [" + compMove[0] + "][" + compMove[1] + "].");
-        
-        // Print the updated board
-        System.out.println("\nCurrent Board:");
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(board[i][j]);
-                if (j < 2) {
-                    System.out.print(" ");
+            System.out.println("\n--- Player " + currentPlayer + "'s Turn (" + currentSymbol + ") ---");
+            
+            int row, col;
+            if (currentPlayer == 1) {
+                // Human Turn
+                while (true) {
+                    int slot = getUserInput(scanner);
+                    int[] index = getBoardIndex(slot);
+                    row = index[0];
+                    col = index[1];
+                    if (isValidMove(board, row, col)) {
+                        break;
+                    } else {
+                        System.out.println("Move is invalid! The cell might be occupied. Try again.");
+                    }
                 }
+            } else {
+                // Computer Turn
+                int[] compMove = getComputerMove(board, random);
+                row = compMove[0];
+                col = compMove[1];
             }
-            System.out.println();
+            
+            // Place the move
+            placeMove(board, row, col, currentSymbol);
+            
+            // Print the updated board
+            System.out.println("\nCurrent Board:");
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    System.out.print(board[i][j]);
+                    if (j < 2) {
+                        System.out.print(" ");
+                    }
+                }
+                System.out.println();
+            }
+            
+            // Check win/draw
+            isWin = checkWin(board, currentSymbol);
+            if (isWin) {
+                System.out.println("\nPlayer " + currentPlayer + " (" + currentSymbol + ") wins the game!");
+                break;
+            }
+            
+            isDraw = checkDraw(board);
+            if (isDraw) {
+                System.out.println("\nThe game is a draw!");
+                break;
+            }
+            
+            // Turn Switching
+            currentPlayer = (currentPlayer == 1) ? 2 : 1;
         }
     }
     
@@ -152,5 +171,34 @@ public class TicTacToe {
                 return new int[]{row, col};
             }
         }
+    }
+
+    // Method to check for a win (UC8 helper)
+    public static boolean checkWin(char[][] board, char symbol) {
+        // Check rows and columns
+        for (int i = 0; i < 3; i++) {
+            if ((board[i][0] == symbol && board[i][1] == symbol && board[i][2] == symbol) ||
+                (board[0][i] == symbol && board[1][i] == symbol && board[2][i] == symbol)) {
+                return true;
+            }
+        }
+        // Check diagonals
+        if ((board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) ||
+            (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)) {
+            return true;
+        }
+        return false;
+    }
+
+    // Method to check for a draw (UC8 helper)
+    public static boolean checkDraw(char[][] board) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == '-') {
+                    return false; // Still empty spaces
+                }
+            }
+        }
+        return true; // Board is full
     }
 }
