@@ -61,6 +61,11 @@ public class TicTacToe {
         boolean isValid = isValidMove(board, row, col);
         if (isValid) {
             System.out.println("Move is valid. The cell is empty.");
+            
+            // UC6: Place Move on Board
+            char currentSymbol = (currentPlayer == 1) ? player1Symbol : player2Symbol;
+            placeMove(board, row, col, currentSymbol);
+            System.out.println("Symbol '" + currentSymbol + "' placed at [" + row + "][" + col + "].");
         } else {
             System.out.println("Move is invalid! The cell might be occupied or out of bounds.");
         }
@@ -105,5 +110,10 @@ public class TicTacToe {
             return false;
         }
         return true;
+    }
+
+    // Method to place move on the board (UC6)
+    public static void placeMove(char[][] board, int row, int col, char symbol) {
+        board[row][col] = symbol;
     }
 }
