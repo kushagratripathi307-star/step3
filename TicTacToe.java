@@ -190,15 +190,19 @@ public class TicTacToe {
         return false;
     }
 
-    // Method to check for a draw (UC8 helper)
+    // Method to check for a draw (UC10)
     public static boolean checkDraw(char[][] board) {
+        int occupiedCount = 0; // Counting Logic
+        // Loop Traversal
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (board[i][j] == '-') {
-                    return false; // Still empty spaces
+                if (board[i][j] != '-') {
+                    occupiedCount++;
                 }
             }
         }
-        return true; // Board is full
+        // Boolean Flags
+        boolean isDraw = (occupiedCount == 9);
+        return isDraw;
     }
 }
