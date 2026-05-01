@@ -50,6 +50,12 @@ public class TicTacToe {
         Scanner scanner = new Scanner(System.in);
         int slot = getUserInput(scanner);
         System.out.println("You have selected slot: " + slot);
+        
+        // UC4: Convert Slot Number to Board Index
+        int[] index = getBoardIndex(slot);
+        int row = index[0];
+        int col = index[1];
+        System.out.println("This corresponds to board index: [" + row + "][" + col + "]");
     }
     
     // Method to handle user input (UC3)
@@ -71,5 +77,12 @@ public class TicTacToe {
             }
         }
         return input;
+    }
+
+    // Method to convert slot (1-9) to board index (row, col) (UC4)
+    public static int[] getBoardIndex(int slot) {
+        int row = (slot - 1) / 3;
+        int col = (slot - 1) % 3;
+        return new int[]{row, col};
     }
 }
