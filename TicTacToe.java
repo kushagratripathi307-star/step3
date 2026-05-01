@@ -69,6 +69,26 @@ public class TicTacToe {
         } else {
             System.out.println("Move is invalid! The cell might be occupied or out of bounds.");
         }
+        
+        // UC7: Computer Makes a Random Move
+        System.out.println("\n--- Computer's Turn ---");
+        // The computer will use the symbol of the player who didn't start
+        char computerSymbol = (currentPlayer == 1) ? player2Symbol : player1Symbol;
+        int[] compMove = getComputerMove(board, random);
+        placeMove(board, compMove[0], compMove[1], computerSymbol);
+        System.out.println("Computer placed '" + computerSymbol + "' at [" + compMove[0] + "][" + compMove[1] + "].");
+        
+        // Print the updated board
+        System.out.println("\nCurrent Board:");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(board[i][j]);
+                if (j < 2) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
     }
     
     // Method to handle user input (UC3)
@@ -115,5 +135,22 @@ public class TicTacToe {
     // Method to place move on the board (UC6)
     public static void placeMove(char[][] board, int row, int col, char symbol) {
         board[row][col] = symbol;
+    }
+
+    // Method for the computer to make a random valid move (UC7)
+    public static int[] getComputerMove(char[][] board, Random random) {
+        int slot;
+        int row;
+        int col;
+        while (true) {
+            slot = random.nextInt(9) + 1; // Generate random slot 1-9
+            int[] index = getBoardIndex(slot);
+            row = index[0];
+            col = index[1];
+            if (isValidMove(board, row, col)) {
+                System.out.println("Computer selected slot: " + slot);
+                return new int[]{row, col};
+            }
+        }
     }
 }
