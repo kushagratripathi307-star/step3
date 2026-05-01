@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class TicTacToe {
     public static void main(String[] args) {
@@ -44,5 +45,31 @@ public class TicTacToe {
         }
         
         System.out.println("Player " + currentPlayer + " will start the game.");
+        
+        // UC3: Accept User Slot Input
+        Scanner scanner = new Scanner(System.in);
+        int slot = getUserInput(scanner);
+        System.out.println("You have selected slot: " + slot);
+    }
+    
+    // Method to handle user input (UC3)
+    public static int getUserInput(Scanner scanner) {
+        int input = -1;
+        boolean valid = false;
+        while (!valid) {
+            System.out.print("Enter a slot number (1-9): ");
+            if (scanner.hasNextInt()) {
+                input = scanner.nextInt();
+                if (input >= 1 && input <= 9) {
+                    valid = true;
+                } else {
+                    System.out.println("Invalid input! Please enter a number between 1 and 9.");
+                }
+            } else {
+                System.out.println("Invalid input! Please enter a number between 1 and 9.");
+                scanner.next(); // Clear invalid input
+            }
+        }
+        return input;
     }
 }
