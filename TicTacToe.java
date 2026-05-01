@@ -173,7 +173,7 @@ public class TicTacToe {
         }
     }
 
-    // Method to check for a win (UC8 helper)
+    // Method to check for a win (UC9)
     public static boolean checkWin(char[][] board, char symbol) {
         // Check rows and columns
         for (int i = 0; i < 3; i++) {
