@@ -56,6 +56,14 @@ public class TicTacToe {
         int row = index[0];
         int col = index[1];
         System.out.println("This corresponds to board index: [" + row + "][" + col + "]");
+        
+        // UC5: Validate User Move
+        boolean isValid = isValidMove(board, row, col);
+        if (isValid) {
+            System.out.println("Move is valid. The cell is empty.");
+        } else {
+            System.out.println("Move is invalid! The cell might be occupied or out of bounds.");
+        }
     }
     
     // Method to handle user input (UC3)
@@ -84,5 +92,18 @@ public class TicTacToe {
         int row = (slot - 1) / 3;
         int col = (slot - 1) % 3;
         return new int[]{row, col};
+    }
+
+    // Method to validate user move (UC5)
+    public static boolean isValidMove(char[][] board, int row, int col) {
+        // Boundary Checking
+        if (row < 0 || row > 2 || col < 0 || col > 2) {
+            return false;
+        }
+        // Emptiness Checking
+        if (board[row][col] != '-') {
+            return false;
+        }
+        return true;
     }
 }
